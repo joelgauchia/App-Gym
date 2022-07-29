@@ -76,17 +76,16 @@ void Registre::borrar_per_data() {
 	cout << "\t >> Entra una data (DD/MM/AAAA): " << endl;
 	cin >> data;
 
-	multimap<Usuari, multimap<string, Exercici>>::const_iterator it = _usuaris_exercicis.begin();
+	multimap<Usuari, multimap<string, Exercici>>::const_iterator it;
 	Usuari guardal;
-	for (it; it != _usuaris_exercicis.end(); it++) {
-		multimap<string, Exercici>::const_iterator it2 = it->second.begin();
-		for (it2; it2 != it->second.end(); it2++) {
-			if (it2->first == data) guardal = it->first;
+	for (it = _usuaris_exercicis.begin(); it != _usuaris_exercicis.end(); it++) {
+		multimap<string, Exercici>::const_iterator it2 = it->second.find(data);
+		if (it2 != it->second.end()) {
+			guardal = it->first;
 		}
 	}
-
 	multimap<Usuari, multimap<string, Exercici>>::const_iterator it3 = _usuaris_exercicis.find(guardal);
-	if (it != _usuaris_exercicis.end()) {
+	if (it3 != _usuaris_exercicis.end()) {
 		_usuaris_exercicis.erase(guardal);
 		cout << "\t >> Esborrada informacio de la data " << data << "!" << endl;
 	}
@@ -108,7 +107,7 @@ void Registre::mostrar_usuaris_sistema() const {
 	cout << "\t*************************************" << endl << endl;
 }
 
-void Registre::mostrar_registre_usuari() const { // no va
+void Registre::mostrar_registre_usuari() const { 
 
 	string nom;
 	cout << "\t >> Entra el nom de l'usuari" << endl;
@@ -149,16 +148,16 @@ void Registre::mostrar_totes_dades() const {
 	cout << endl << "\t**************************" << endl << endl;
 }
 
-void Registre::mostrar_dades_per_data() const { // funciona
+void Registre::mostrar_dades_per_data() const {
 	
 	string data;
 	cout << "Entra una data (DD/MM/AAAA): " << endl;
 	cin >> data;
 
 	bool trobat = false;
-	multimap<Usuari, multimap<string, Exercici>>::const_iterator it = _usuaris_exercicis.begin();
+	multimap<Usuari, multimap<string, Exercici>>::const_iterator it;
 
-	for (it; it != _usuaris_exercicis.end(); it++) {
+	for (it = _usuaris_exercicis.begin(); it != _usuaris_exercicis.end(); it++) {
 		multimap<string, Exercici>::const_iterator it2 = it->second.find(data);
 		if (it2 != it->second.end()) {
 			cout << "\t >> Dia: " << data << ", usuari " << it->first.nom() << ": "; it2->second.mostrar_exercici();
